@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
 
+# Define tasks
 # 定义任务
 a_tasks = [
     {"name": "Task A1", "start": datetime(2023, 4, 1), "end": datetime(2023, 12, 31)},
@@ -28,7 +29,7 @@ d_tasks = [
     {"name": "Task D4", "start": datetime(2027, 2, 1), "end": datetime(2027, 3, 31)},
 ]
 
-
+# Important dates
 # 重要日期
 important_dates = [
     {"name": "Year 0",  "date": datetime(2023, 4, 1)},
@@ -38,6 +39,7 @@ important_dates = [
     {"name": "Year 4",  "date": datetime(2027, 4, 1)},
 ]
 
+# Color mapping
 # 颜色映射
 colors = {
     "a": "tab:blue",
@@ -46,6 +48,7 @@ colors = {
     "d": "tab:purple",
 }
 
+# Merge all tasks and record section lengths
 # 合并所有任务并记录分段长度
 task_groups = [
     (a_tasks, colors["a"]),
@@ -63,28 +66,35 @@ for tasks, color in task_groups:
     current_position += len(tasks)
     section_lines.append(current_position - 0.5)
 
+# Sort tasks by start date
 # 反转任务顺序
 all_tasks.reverse()
 
+# Set up the figure
 # 创建图形
 fig, ax = plt.subplots(figsize=(12, 8))
 
+# Set up the grid and zorder
 # 启用网格并设置zorder
 ax.grid(True, which='both', linestyle='--', linewidth=0.5, zorder=1)
 
+# Set up the x-axis
 # 绘制甘特图
 for i, (name, start, end, color) in enumerate(all_tasks):
     ax.broken_barh([(start, end - start)], (i - 0.4, 0.8), facecolors=color, zorder=2)
 
+# Set up the y-axis
 # 添加虚线分割线
 for line_position in section_lines[:-1]:
     ax.axhline(y=len(all_tasks) - line_position - 1, color='black', linewidth=0.8, linestyle='--', zorder=3)
 
+# Set up the important dates
 # 添加重要日期竖线和标注
 for date in important_dates:
     ax.axvline(x=date["date"], color='black', linewidth=1, linestyle='--', zorder=4)
     ax.text(date["date"], len(all_tasks) - 0.5, date["name"], rotation=0, verticalalignment='bottom', horizontalalignment='right', zorder=5)
 
+# Set up the labels and title
 # 设置轴标签和标题
 ax.set_yticks(range(len(all_tasks)))
 ax.set_yticklabels([task[0] for task in all_tasks])
